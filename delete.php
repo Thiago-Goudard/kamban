@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Excluir Tarefa</title>
+    <link rel="stylesheet" href="css/kanban.css">
 </head>
 <body>
     <h1>Excluir Tarefa</h1>
