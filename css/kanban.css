@@ -1,0 +1,10 @@
+body { font-family: Arial, sans-serif; }
+.kanban { display: flex; gap: 20px; }
+.col { background: #f4f4f4; padding: 10px; border-radius: 8px; width: 30%; }
+.col h2 { text-align: center; }
+.tarefa { background: #fff; margin-bottom: 10px; padding: 10px; border-radius: 6px; box-shadow: 0 1px 3px #ccc; }
+.prioridade-Alta { color: #c00; font-weight: bold; }
+.prioridade-Média { color: #e6a100; font-weight: bold; }
+.prioridade-Baixa { color: #007700; font-weight: bold; }
+.acoes { margin-top: 8px; }
+.acoes a { margin-right: 8px; }
