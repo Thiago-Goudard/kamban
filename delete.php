@@ -1,6 +1,6 @@
 <?php
 
-$conn = new mysqli('localhost', 'root', '', 'kanban');
+$conn = new mysqli('localhost', 'root', 'root', 'kanban');
 if ($conn->connect_error) {
     die('Erro de conexão: ' . $conn->connect_error);
 }
