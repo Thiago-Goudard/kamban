@@ -21,7 +21,7 @@ while ($row = $res->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <title>Kanban - Visualizar Tarefas</title>
-    <link rel="stylesheet" href="css/kanban.css">
+    <link rel="stylesheet" href="./css/kanban.css?v=2">
 </head>
 <body>
     <h1>Quadro Kanban</h1>
