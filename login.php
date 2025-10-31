@@ -10,7 +10,8 @@ $erro = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $nome = $_POST['nome'];
-   
+    
+    $stmt = $conn->prepare('SELECT * FROM usuario WHERE nome=? AND email=?');
     $stmt->bind_param('ss', $nome, $email);
     $stmt->execute();
     $res = $stmt->get_result();
