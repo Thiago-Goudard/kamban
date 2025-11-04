@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return;
         }
         resDiv.textContent = 'Consultando...';
-        // Usando ip-api.com para latitude/longitude
+       
         fetch(`http://ip-api.com/json/?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`)
             .then(r => r.json())
             .then(d => {
@@ -92,8 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (d.regionName) info += `Estado: ${d.regionName}<br>`;
                 if (d.country) info += `País: ${d.country}<br>`;
                 if (d.timezone) {
-                    // Calcular horário local
-                    try {
+                   
                         const now = new Date();
                         const localTime = now.toLocaleString('pt-BR', {timeZone: d.timezone});
                         info += `Horário local: ${localTime}<br>`;
