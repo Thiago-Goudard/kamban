@@ -56,45 +56,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </select>
         </label><br><br>
         <fieldset style="border:1px solid #ccc;padding:10px;max-width:350px;">
-            <legend>Verificar horário local (opcional)</legend>
+            <legend>Verificar localização e horário local (opcional)</legend>
             <label>Latitude:<br>
-                <input type="text" id="lat" placeholder="Ex: 39.6034810">
+                <input type="text" id="lat" placeholder="Ex: -25.5026">
             </label><br>
             <label>Longitude:<br>
-                <input type="text" id="lng" placeholder="Ex: -119.6822510">
+                <input type="text" id="lng" placeholder="Ex: -49.2908">
             </label><br>
-            <button type="button" onclick="buscarHorarioLocal()">Ver horário local</button>
-            <div id="resultadoHorario" style="margin-top:8px;color:blue;"></div>
+            <button type="button" onclick="buscarGeo()">Ver informações</button>
+            <div id="resultadoGeo" style="margin-top:8px;color:blue;"></div>
         </fieldset><br>
         <button type="submit">Cadastrar</button>
     </form>
     <a href="visualizar.php">Voltar para o Kanban</a>
     <script>
-    function buscarHorarioLocal() {
+    function buscarGeo() {
         const lat = document.getElementById('lat').value.trim();
         const lng = document.getElementById('lng').value.trim();
-        const resDiv = document.getElementById('resultadoHorario');
+        const resDiv = document.getElementById('resultadoGeo');
         if (!lat || !lng) {
             resDiv.textContent = 'Informe latitude e longitude.';
             return;
         }
-        const timestamp = Math.floor(Date.now() / 1000);
         resDiv.textContent = 'Consultando...';
-        fetch(`timezone.php?location=${encodeURIComponent(lat+','+lng)}&timestamp=${timestamp}`)
+        // Usando ip-api.com para latitude/longitude
+        fetch(`http://ip-api.com/json/?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`)
             .then(r => r.json())
             .then(d => {
-                if (d.status === 'OK') {
-                    resDiv.textContent = `Horário local: ${d.local_datetime} (fuso: ${d.timeZoneName})`;
-                } else if (d.errorMessage) {
-                    resDiv.textContent = 'Erro: ' + d.errorMessage;
-                } else if (d.error) {
-                    resDiv.textContent = 'Erro: ' + d.error;
-                } else {
-                    resDiv.textContent = 'Erro ao consultar timezone.';
+                if (d.status !== 'success') {
+                    resDiv.textContent = 'Erro: ' + (d.message || 'Não foi possível obter dados.');
+                    return;
                 }
+                let info = '';
+                if (d.city) info += `Cidade: ${d.city}<br>`;
+                if (d.regionName) info += `Estado: ${d.regionName}<br>`;
+                if (d.country) info += `País: ${d.country}<br>`;
+                if (d.timezone) {
+                    // Calcular horário local
+                    try {
+                        const now = new Date();
+                        const localTime = now.toLocaleString('pt-BR', {timeZone: d.timezone});
+                        info += `Horário local: ${localTime}<br>`;
+                        info += `Fuso horário: ${d.timezone}<br>`;
+                    } catch(e) {
+                        info += `Fuso horário: ${d.timezone}<br>`;
+                    }
+                }
+                if (!info) info = 'Nenhuma informação encontrada.';
+                resDiv.innerHTML = info;
             })
             .catch(() => {
-                resDiv.textContent = 'Erro ao consultar timezone.';
+                resDiv.textContent = 'Erro ao consultar localização.';
             });
     }
     </script>
